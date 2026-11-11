@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171426">
+  <meta name="description" content="Questly — wykonuj zadania, zdobywaj XP i rywalizuj ze znajomymi.">
+
+  <title>Questly</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- EKRAN INSTALACJI -->
+  <div id="installWall" class="install-wall hidden">
+    <div class="wall-card">
+      <div class="logo">Q</div>
+      <h1>Questly</h1>
+      <h2>APLIKACJA NIE FUNKCJONUJE NA STRONIE INTERNETOWEJ</h2>
+      <p>Zainstaluj Questly na swoim urządzeniu, aby kontynuować.</p>
+      <button id="installButton" class="primary">Zainstaluj Questly</button>
+      <p id="installHelp" class="fine"></p>
+    </div>
+  </div>
+
+  <!-- GŁÓWNA APLIKACJA -->
+  <main id="app" class="shell hidden">
+
+    <header class="top">
+      <div class="brand">
+        <div class="logo">Q</div>
+        <div>
+          <h1>Questly</h1>
+          <p>Twoja przygoda zaczyna się tutaj</p>
+        </div>
+      </div>
+
+      <button id="logoutButton" class="secondary hidden">Wyloguj</button>
+    </header>
+
+    <!-- LOGOWANIE -->
+    <section id="authSection" class="auth-card">
+
+      <div class="hero">
+        <span class="eyebrow">LEVEL UP YOUR LIFE</span>
+        <h2>Witaj w Questly</h2>
+        <p>Wykonuj zadania. Zdobywaj XP. Odkrywaj świat.</p>
+      </div>
+
+      <div class="tabs">
+        <button id="registerTab" class="tab active">Rejestracja</button>
+        <button id="loginTab" class="tab">Logowanie</button>
+      </div>
+
+      <form id="phoneForm">
+        <label for="phone">Numer telefonu</label>
+        <input
+          id="phone"
+          type="tel"
+          placeholder="+48123456789"
+          autocomplete="tel"
+          required
+        >
+        <button id="sendCodeButton" class="primary" type="submit">
+          Wyślij kod SMS
+        </button>
+      </form>
+
+      <form id="codeForm" class="hidden">
+        <label for="code">Kod SMS</label>
+        <input
+          id="code"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          maxlength="6"
+          placeholder="123456"
+          required
+        >
+        <button class="primary" type="submit">Potwierdź kod</button>
+      </form>
+
+      <form id="usernameForm" class="hidden">
+        <label for="username">Twój unikalny nick</label>
+        <input
+          id="username"
+          type="text"
+          minlength="3"
+          maxlength="20"
+          pattern="[a-zA-Z0-9_]+"
+          placeholder="np. quest_player"
+          autocomplete="username"
+          required
+        >
+        <p class="fine">3–20 znaków. Litery, cyfry i podkreślenia.</p>
+        <button class="primary" type="submit">Rozpocznij przygodę</button>
+      </form>
+
+      <p id="authStatus" class="status" role="status"></p>
+    </section>
+
+    <!-- PANEL GRACZA -->
+    <section id="dashboard" class="hidden">
+
+      <div class="player-card">
+        <div class="player-info">
+          <div id="playerAvatar" class="avatar">⚔️</div>
+          <div>
+            <p class="fine">Witaj, graczu</p>
+            <h2 id="playerName">Gracz</h2>
+            <p id="playerLevel">Poziom 1</p>
+          </div>
+        </div>
+
+        <div class="xp-section">
+          <div class="xp-label">
+            <span>XP</span>
+            <span id="xpText">0 / 100</span>
+          </div>
+          <div class="xp-track">
+            <div id="xpBar" class="xp-fill"></div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div>
+            <span id="pointsValue">0</span>
+            <small>Punkty</small>
+          </div>
+          <div>
+            <span id="levelValue">1</span>
+            <small>Poziom</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZADANIA -->
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">TWOJA PRZYGODA</span>
+            <h2>Zadania</h2>
+          </div>
+          <button id="refreshQuests" class="secondary">Odśwież</button>
+        </div>
+
+        <div class="quest-filters">
+          <button class="filter active" data-filter="all">Wszystkie</button>
+          <button class="filter" data-filter="daily">Dzienne</button>
+          <button class="filter" data-filter="weekly">Tygodniowe</button>
+          <button class="filter" data-filter="special">Specjalne</button>
+          <button class="filter" data-filter="local">Lokalne</button>
+        </div>
+
+        <div id="questList" class="quest-list">
+          <p class="empty">Ładowanie zadań...</p>
+        </div>
+
+        <p id="questStatus" class="status" role="status"></p>
+      </section>
+
+      <!-- LOKALIZACJA -->
+      <section class="section local-section">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">ODKRYWAJ OKOLICĘ</span>
+            <h2>Zadania lokalne</h2>
+          </div>
+          <div class="local-icon">📍</div>
+        </div>
+
+        <p>
+          Włącz lokalizację, aby sprawdzić zadania dostępne w Twojej okolicy.
+        </p>
+
+        <button id="findLocalQuests" class="primary">
+          Znajdź zadania w pobliżu
+        </button>
+
+        <p id="locationStatus" class="status" role="status"></p>
+      </section>
+
+    </section>
+
+    <footer class="footer">
+      <p>QUESTLY © 2026</p>
+      <p>Wykonuj zadania. Zdobywaj poziomy.</p>
+    </footer>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app.js"></script>
+
+</body>
+  </html>
+  
